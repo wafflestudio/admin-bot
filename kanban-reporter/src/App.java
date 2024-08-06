@@ -1,15 +1,21 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class App {
-    static String notionDatabaseId;
-    static String notionToken;
+
     public static void main(String[] args) throws Exception {
         // Read Environment, Default = dev
-        String environment = System.getProperty("env", "dev");
+        String environment = System.getProperty("env", "");
 
+        Map<String, String> secrets = new HashMap<>();
+        secrets = load_secrets(environment);
+    }
+
+    private static Map<String, String> load_secrets(String environment) {
         // Set path for config.properties
         String configFileName = "../config/" + environment + "/config.properties";
 
@@ -17,6 +23,10 @@ public class App {
         Properties properties = new Properties();
 
         try (InputStream input = new FileInputStream(configFileName)) {
+            Map<String, String> secrets = new HashMap<>();
+            String notionDatabaseId;
+            String notionToken;
+
             // Load properties file
             properties.load(input);
 
@@ -24,11 +34,13 @@ public class App {
             notionDatabaseId = properties.getProperty("NOTION_DATABASE_ID", null);
             notionToken = properties.getProperty("NOTION_TOKEN", null);
 
-            // Print properties
-            System.out.println("Notion Database ID: " + notionDatabaseId);
-            System.out.println("Notion Token: " + notionToken);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            // Fill HashMap
+            secrets.put("notionDatabaseId", notionDatabaseId);
+            secrets.put("notionToken", notionToken);
+            
+            return secrets;
+        } catch (IOException e) {
+            return new HashMap<>();
         }
     }
 }
