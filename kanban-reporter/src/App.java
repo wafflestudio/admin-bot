@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class App {
+    static String notionDatabaseId;
+    static String notionToken;
     public static void main(String[] args) throws Exception {
         // Read Environment, Default = dev
         String environment = System.getProperty("env", "dev");
@@ -19,8 +21,8 @@ public class App {
             properties.load(input);
 
             // Get properties
-            String notionDatabaseId = properties.getProperty("NOTION_DATABASE_ID", null);
-            String notionToken = properties.getProperty("NOTION_TOKEN", null);
+            notionDatabaseId = properties.getProperty("NOTION_DATABASE_ID", null);
+            notionToken = properties.getProperty("NOTION_TOKEN", null);
 
             // Print properties
             System.out.println("Notion Database ID: " + notionDatabaseId);
