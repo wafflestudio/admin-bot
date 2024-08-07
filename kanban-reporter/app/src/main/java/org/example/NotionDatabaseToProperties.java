@@ -27,7 +27,7 @@ public class NotionDatabaseToProperties {
         String[] dirs = dir.split("/");
 
         for (int i=0; i<dirs.length-1; i++) {
-            curData = getPropertyByNextDir(data, dirs[i]);
+            curData = getPropertyByNextDir(curData, dirs[i]);
         }
         
         try {
