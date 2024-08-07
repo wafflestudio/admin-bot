@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,11 +16,19 @@ public class App {
 
         Map<String, String> secrets = new HashMap<>();
         secrets = load_secrets(environment);
+        // System.out.println(secrets);
+
+        NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(secrets.get("notionToken"), secrets.get("notionDatabaseId"));
+        notionDatabaseRead.readDatabase();
     }
 
     private static Map<String, String> load_secrets(String environment) {
         // Set path for config.properties
-        String configFileName = "../../../resources/" + environment + "/config.properties";
+        String configFileName = "app/src/main/resources/" + environment + "/config.properties";
+
+        // Test
+        // File file = new File(configFileName);
+        // System.out.println("Trying to read file: " + file.getAbsolutePath());
 
         // Load Properties
         Properties properties = new Properties();
