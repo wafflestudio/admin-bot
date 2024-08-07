@@ -15,12 +15,24 @@ public class NotionToSlack {
         Boolean noAssignees = checkNoAssignees(issue);
         Boolean noTitle = checkNoTitle(issue);
         Boolean propertyAbsence = (noDue || noAssignees || noTitle);
+
+        Boolean exceedDue = false;
+        String due = null;
+        if (!noDue) {
+            if (issue.getOrDefault("end", null) == null) {
+                due = issue.getOrDefault("start", "2099-12-31").substring(0, 10);
+            }
+            else {
+                due = issue.getOrDefault("end", "2099-12-31").substring(0, 10);
+            }
+        }
+
+        System.out.println(issue.get("title") + " " + due);
     }
 
     private Boolean checkNoDue(HashMap<String,String> issue) {
         String start = issue.getOrDefault("start",  null);
-        String end = issue.getOrDefault("end",  null);
-        return (start == null && end == null);
+        return (start == null);
     }
 
     private Boolean checkNoAssignees(HashMap<String,String> issue) {
