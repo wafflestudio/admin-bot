@@ -2,12 +2,13 @@ package org.example;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -26,9 +27,7 @@ public class NotionDatabaseRead {
         ENVIRONMENT = environment;
     }
 
-    public JSONObject readDatabase() {
-        List<Map<String, Object>> issues = new ArrayList<>();
-
+    public JsonArray readDatabase() {
         try {
             OkHttpClient client = new OkHttpClient();
             
@@ -45,8 +44,15 @@ public class NotionDatabaseRead {
                 .build();
 
             Response response = client.newCall(request).execute();
-
-            return ControlStringAndJson.stringToJson(response.body().string());
+            
+            if (response.isSuccessful()) {
+                JsonObject jsonObject = JsonParser.parseString(response.body().string()).getAsJsonObject();
+                JsonArray result = jsonObject.getAsJsonArray("results");
+                return result;
+            }
+            else {
+                return null;
+            }
         } catch (Exception e) {
             return null;
         }

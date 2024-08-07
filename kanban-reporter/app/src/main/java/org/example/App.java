@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
 
 public class App {
 
@@ -23,7 +23,11 @@ public class App {
 
         // Read Notion
         NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, secrets.get("notionToken"), secrets.get("notionDatabaseId"));
-        JSONObject database = notionDatabaseRead.readDatabase();
+        JsonArray database = notionDatabaseRead.readDatabase();
+        
+        // Get Issues
+        System.out.println(database.get(0));
+        System.out.println(database.size());
     }
 
     private static Map<String, String> load_secrets(String environment) {
