@@ -8,18 +8,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.json.simple.JSONObject;
+
 public class App {
 
     public static void main(String[] args) throws Exception {
         // Read Environment, Default = dev
         String environment = System.getProperty("env", "dev");
-
+        
+        // Read Secrets
         Map<String, String> secrets = new HashMap<>();
         secrets = load_secrets(environment);
         // System.out.println(secrets);
 
+        // Read Notion
         NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, secrets.get("notionToken"), secrets.get("notionDatabaseId"));
-        notionDatabaseRead.readDatabase();
+        JSONObject database = notionDatabaseRead.readDatabase();
     }
 
     private static Map<String, String> load_secrets(String environment) {

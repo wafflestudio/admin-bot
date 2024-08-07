@@ -1,7 +1,6 @@
 package org.example;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class NotionDatabaseRead {
         ENVIRONMENT = environment;
     }
 
-    public void readDatabase() {
+    public JSONObject readDatabase() {
         List<Map<String, Object>> issues = new ArrayList<>();
 
         try {
@@ -47,9 +46,9 @@ public class NotionDatabaseRead {
 
             Response response = client.newCall(request).execute();
 
-            System.out.println(response.body().string());
+            return ControlStringAndJson.stringToJson(response.body().string());
         } catch (Exception e) {
-            System.out.println(e);
+            return null;
         }
     }
 
