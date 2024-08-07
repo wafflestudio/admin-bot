@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class App {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // Read Environment, Default = dev
         String environment = System.getProperty("env", "dev");
         
@@ -21,12 +22,15 @@ public class App {
         secrets = load_secrets(environment);
         // System.out.println(secrets);
 
-        // Read Notion
+        // Read Notion and Get Issues
         NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, secrets.get("notionToken"), secrets.get("notionDatabaseId"));
         JsonArray database = notionDatabaseRead.readDatabase();
         
-        // Get Issues
-        System.out.println(database.get(0));
+        // Get Needed Properties
+        NotionDatabaseToProperties notionDatabaseToProperties = new NotionDatabaseToProperties();
+
+        JsonObject a = database.get(0).getAsJsonObject();
+        System.out.println(notionDatabaseToProperties.getProperty(a, "id"));
         System.out.println(database.size());
     }
 
