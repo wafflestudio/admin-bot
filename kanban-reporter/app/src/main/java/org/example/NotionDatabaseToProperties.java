@@ -63,15 +63,20 @@ public class NotionDatabaseToProperties {
 
         // fix: 코드가 살짝 좋지 않아 보인다..
         // fix: 숫자가 들어간 디렉토리가 맨 마지막이면 문제가 발생할 것 같다.
-        // fix: parse에 대한 예외 처리
-        if (dirs.length == 0) return new JsonObject();
-        else if (dirs.length == 1) return data.get(nextDir).getAsJsonObject();
-        else {
-            JsonArray curDataArray = data.get(dirs[0]).getAsJsonArray();
-            for (int i=1; i<dirs.length-1; i++) {
-                curDataArray = curDataArray.get(Integer.parseInt(dirs[i])).getAsJsonArray();
+        // fix: 예외 처리가 깔끔하지 않다.
+
+        try {
+            if (dirs.length == 0) return new JsonObject();
+            else if (dirs.length == 1) return data.get(nextDir).getAsJsonObject();
+            else {
+                JsonArray curDataArray = data.get(dirs[0]).getAsJsonArray();
+                for (int i=1; i<dirs.length-1; i++) {
+                    curDataArray = curDataArray.get(Integer.parseInt(dirs[i])).getAsJsonArray();
+                }
+                return curDataArray.get(Integer.parseInt(dirs[dirs.length-1])).getAsJsonObject();
             }
-            return curDataArray.get(Integer.parseInt(dirs[dirs.length-1])).getAsJsonObject();
+        } catch (Exception e) {
+            return null;
         }
     }
 

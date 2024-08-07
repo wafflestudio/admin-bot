@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -27,16 +28,20 @@ public class App {
         NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, secrets.get("notionToken"), secrets.get("notionDatabaseId"));
         JsonArray database = notionDatabaseRead.readDatabase();
         
-        // Get Needed Properties
+        // Filter Needed Properties
         NotionDatabaseToProperties notionDatabaseToProperties = new NotionDatabaseToProperties();
+        ArrayList<HashMap<String, String>> issues = new ArrayList<HashMap<String, String>>();
 
-        JsonObject a = database.get(0).getAsJsonObject();
-        System.out.println(notionDatabaseToProperties.getProperty(a, "id"));
-        System.out.println(notionDatabaseToProperties.getProperty(a, "title"));
-        System.out.println(notionDatabaseToProperties.getProperty(a, "start"));
-        System.out.println(notionDatabaseToProperties.getProperty(a, "end"));
-        System.out.println(notionDatabaseToProperties.getProperty(a, "assignees"));
-        System.out.println(database.size());
+        for (JsonElement jsonElement : database) {
+            HashMap<String, String> issueProperties = new HashMap<String, String>();
+            JsonObject issue = jsonElement.getAsJsonObject();
+            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "id"));
+            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "title"));
+            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "start"));
+            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "end"));
+            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "assignees"));
+            issues.add(issueProperties);
+        }
     }
 
     private static Map<String, String> load_secrets(String environment) {
