@@ -32,7 +32,7 @@ public class App {
         NotionDatabaseToProperties notionDatabaseToProperties = new NotionDatabaseToProperties();
         ArrayList<HashMap<String, String>> issues = new ArrayList<HashMap<String, String>>();
 
-        for (JsonElement jsonElement : database) {
+        for (JsonElement jsonElement : database) { // fix: 함수 분리
             HashMap<String, String> issueProperties = new HashMap<String, String>();
             JsonObject issue = jsonElement.getAsJsonObject();
             issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "id"));
@@ -43,11 +43,15 @@ public class App {
             issues.add(issueProperties);
         }
 
+        // ?
+        NotionToSlack notionToSlack = new NotionToSlack();
+        notionToSlack.issuesToTexts(issues);
+
         // Create Slack Thread
-        SlackBot slackBot = new SlackBot(secrets.get("slackBotToken"), secrets.get("slackChannelId"));
-        String threadTs = slackBot.createThread("Initial Test");
-        Boolean success = slackBot.createComment(threadTs, "Initial Comment");
-        System.out.println(success);
+        // SlackBot slackBot = new SlackBot(secrets.get("slackBotToken"), secrets.get("slackChannelId"));
+        // String threadTs = slackBot.createThread("Initial Test");
+        // Boolean success = slackBot.createComment(threadTs, "Initial Comment");
+        // System.out.println(success);
     }
 
     private static Map<String, String> load_secrets(String environment) {
