@@ -31,7 +31,10 @@ public class NotionToSlack {
             dueState = decideDueState(due);
         }
 
-        System.out.println(issue.get("title") + " " + dueState);
+        Boolean toMakeComment = (propertyAbsence || (dueState != DueState.LEFT_ENOUTH));
+        if (toMakeComment) {
+            System.out.println(issue.get("title") + " " + dueState);
+        }
     }
 
     private Boolean checkNoDue(HashMap<String,String> issue) {
