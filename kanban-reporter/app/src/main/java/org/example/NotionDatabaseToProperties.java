@@ -8,6 +8,8 @@ import com.google.gson.JsonObject;
 public class NotionDatabaseToProperties {
     private final String ID_DIR = "id";
     private final String TITLE_DIR = "properties/이름/title-0/text/content";
+    private final String START_DIR = "properties/기한/date/start";
+    private final String END_DIR = "properties/기한/date/end";
 
     public HashMap<String, String> getProperty(JsonObject data, String propertyName) {
         String dir;
@@ -19,6 +21,14 @@ public class NotionDatabaseToProperties {
 
             case "title":
                 dir = TITLE_DIR;
+                break;
+
+            case "start":
+                dir = START_DIR;
+                break;
+
+            case "end":
+                dir = END_DIR;
                 break;
         
             default:
