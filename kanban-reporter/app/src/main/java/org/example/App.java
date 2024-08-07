@@ -18,7 +18,7 @@ public class App {
         secrets = load_secrets(environment);
         // System.out.println(secrets);
 
-        NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(secrets.get("notionToken"), secrets.get("notionDatabaseId"));
+        NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, secrets.get("notionToken"), secrets.get("notionDatabaseId"));
         notionDatabaseRead.readDatabase();
     }
 
