@@ -33,7 +33,8 @@ public class NotionToSlack {
 
         Boolean toMakeComment = (propertyAbsence || (dueState != DueState.LEFT_ENOUTH));
         if (toMakeComment) {
-            System.out.println(issue.get("title") + " " + dueState);
+            // Line 1
+            String issueLink = "https://www.notion.so/" + issue.getOrDefault("id", "").replace("-", "");
         }
     }
 
