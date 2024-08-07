@@ -26,8 +26,7 @@ public class SlackBot {
             ChatPostMessageResponse response = slack.methods().chatPostMessage(request);
 
             if (response.isOk()) {
-                String timestamp = response.getTs();
-                return timestamp;
+                return response.getTs();
             } else {
                 return null;
             }
@@ -43,7 +42,7 @@ public class SlackBot {
             .token(SLACK_BOT_TOKEN)
             .channel(SLACK_CHANNEL_ID)
             .text(content)
-            .threadTs(parentTs) // 부모 메시지의 timestamp
+            .threadTs(parentTs)
             .build();
 
         try {
