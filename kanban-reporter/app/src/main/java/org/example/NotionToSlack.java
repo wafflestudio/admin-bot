@@ -35,6 +35,8 @@ public class NotionToSlack {
 
         Boolean toMakeComment = (propertyAbsence || (dueState != DueState.LEFT_ENOUTH));
         if (toMakeComment) {
+            // fix: 각 라인들에 대해 함수 분리를 할 수 있다면..?
+
             // Line 1
             String assigneesString = "";
             Integer assigneeNumber = 0;
@@ -52,7 +54,19 @@ public class NotionToSlack {
             }
             String issueLink = "https://www.notion.so/" + issue.getOrDefault("id", "").replace("-", "");
             String lineOne = String.format("%s <%s|%s>", assigneesString, issueLink, issue.getOrDefault("title", ""));
-            return lineOne;
+
+            // Line 2
+            String lineTwo = "";
+            if (propertyAbsence) {
+                lineTwo += "\n";
+                if (noTitle) lineTwo += "제목, ";
+                if (noAssignees) lineTwo += "배정, ";
+                if (noDue) lineTwo += "기한, ";
+                lineTwo = lineTwo.replaceAll(", $", "");
+                lineTwo += "이 없습니다. 해당 속성을 채워주세요!";
+            }
+
+            return lineOne + lineTwo;
         }
         else return "";
     }
