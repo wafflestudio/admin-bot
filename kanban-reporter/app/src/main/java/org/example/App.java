@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class App {
@@ -34,6 +35,7 @@ public class App {
         System.out.println(notionDatabaseToProperties.getProperty(a, "title"));
         System.out.println(notionDatabaseToProperties.getProperty(a, "start"));
         System.out.println(notionDatabaseToProperties.getProperty(a, "end"));
+        System.out.println(notionDatabaseToProperties.getProperty(a, "assignees"));
         System.out.println(database.size());
     }
 

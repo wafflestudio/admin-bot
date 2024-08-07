@@ -10,6 +10,7 @@ public class NotionDatabaseToProperties {
     private final String TITLE_DIR = "properties/이름/title-0/text/content";
     private final String START_DIR = "properties/기한/date/start";
     private final String END_DIR = "properties/기한/date/end";
+    private final String ASSIGNEES_DIR = "properties/배정/people";
 
     public HashMap<String, String> getProperty(JsonObject data, String propertyName) {
         String dir;
@@ -30,6 +31,10 @@ public class NotionDatabaseToProperties {
             case "end":
                 dir = END_DIR;
                 break;
+
+            case "assignees":
+                dir = ASSIGNEES_DIR;
+                return getAssignees(data, dir);
         
             default:
                 return null;
@@ -68,5 +73,23 @@ public class NotionDatabaseToProperties {
             }
             return curDataArray.get(Integer.parseInt(dirs[dirs.length-1])).getAsJsonObject();
         }
+    }
+
+    // fix: 당장 구현을 위해 따로 분리했는데, 일반화를 할 수만 있다면..
+    private HashMap<String, String> getAssignees(JsonObject data, String dir) {
+        JsonObject curData = data.deepCopy();
+        HashMap<String, String> result = new HashMap<String, String>();
+
+        String[] dirs = dir.split("/");
+        for (int i=0; i<dirs.length-1; i++) {
+            curData = getPropertyByNextDir(curData, dirs[i]);
+        }
+
+        JsonArray assigneesJsonArray = curData.getAsJsonArray(dirs[dirs.length-1]);
+        for (int i=0; i<assigneesJsonArray.size(); i++) {
+            result.put("assignee"+(i+1), assigneesJsonArray.get(i).getAsJsonObject().get("id").getAsString());
+        }
+        
+        return result;
     }
 }
