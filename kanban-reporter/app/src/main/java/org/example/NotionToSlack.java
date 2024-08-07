@@ -1,5 +1,7 @@
 package org.example;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,7 +18,7 @@ public class NotionToSlack {
         Boolean noTitle = checkNoTitle(issue);
         Boolean propertyAbsence = (noDue || noAssignees || noTitle);
 
-        Boolean exceedDue = false;
+        DueState dueState = DueState.LEFT_ENOUTH;
         String due = null;
         if (!noDue) {
             if (issue.getOrDefault("end", null) == null) {
@@ -25,9 +27,11 @@ public class NotionToSlack {
             else {
                 due = issue.getOrDefault("end", "2099-12-31").substring(0, 10);
             }
+
+            dueState = decideDueState(due);
         }
 
-        System.out.println(issue.get("title") + " " + due);
+        System.out.println(issue.get("title") + " " + dueState);
     }
 
     private Boolean checkNoDue(HashMap<String,String> issue) {
@@ -43,5 +47,25 @@ public class NotionToSlack {
     private Boolean checkNoTitle(HashMap<String,String> issue) {
         String title = issue.getOrDefault("title",  null);
         return (title == null);
+    }
+
+    private DueState decideDueState(String due) {
+        try {
+            LocalDate dueDate = LocalDate.parse(due);
+            LocalDate nowDate = LocalDate.now();
+            Long daysExceeded = ChronoUnit.DAYS.between(dueDate, nowDate);
+
+            if (daysExceeded < -1) return DueState.LEFT_ENOUTH;
+            else if (daysExceeded < 0) return DueState.ONE_DAY_LEFT;
+            else if (daysExceeded < 1) return DueState.THE_DAY;
+            else if (daysExceeded < 4) return DueState.EXCEEDED_A_LITTLE;
+            else return DueState.EXCEEDED_TOO_MUCH;
+        } catch (Exception e) {
+            return DueState.LEFT_ENOUTH;
+        }
+    }
+
+    private enum DueState {
+        LEFT_ENOUTH, ONE_DAY_LEFT, THE_DAY, EXCEEDED_A_LITTLE, EXCEEDED_TOO_MUCH
     }
 }
