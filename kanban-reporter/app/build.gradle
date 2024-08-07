@@ -27,6 +27,14 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Slack API 클라이언트
+    implementation 'com.slack.api:bolt:1.40.3'
+    implementation 'com.slack.api:slack-api-client:1.28.0'
+    implementation 'com.slack.api:slack-api-model:1.28.0'
+
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-nop:1.7.36'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
