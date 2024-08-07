@@ -31,6 +31,7 @@ public class App {
 
         JsonObject a = database.get(0).getAsJsonObject();
         System.out.println(notionDatabaseToProperties.getProperty(a, "id"));
+        System.out.println(notionDatabaseToProperties.getProperty(a, "title"));
         System.out.println(database.size());
     }
 
