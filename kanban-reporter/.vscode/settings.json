@@ -1,8 +1,9 @@
 {
     "java.project.sourcePaths": [
-        "app/src/main/java/org/example"
+        "app/src/main/java"
     ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [],
     "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
 }
