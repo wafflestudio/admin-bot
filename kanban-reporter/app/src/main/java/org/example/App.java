@@ -42,6 +42,12 @@ public class App {
             issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "assignees"));
             issues.add(issueProperties);
         }
+
+        // Create Slack Thread
+        SlackBot slackBot = new SlackBot(secrets.get("slackBotToken"), secrets.get("slackChannelId"));
+        String threadTs = slackBot.createThread("Initial Test");
+        Boolean success = slackBot.createComment(threadTs, "Initial Comment");
+        System.out.println(success);
     }
 
     private static Map<String, String> load_secrets(String environment) {
@@ -57,19 +63,21 @@ public class App {
 
         try (InputStream input = new FileInputStream(configFileName)) {
             Map<String, String> secrets = new HashMap<>();
-            String notionDatabaseId;
-            String notionToken;
 
             // Load properties file
             properties.load(input);
 
             // Get properties
-            notionDatabaseId = properties.getProperty("NOTION_DATABASE_ID", null);
-            notionToken = properties.getProperty("NOTION_TOKEN", null);
+            String notionDatabaseId = properties.getProperty("NOTION_DATABASE_ID", null);
+            String notionToken = properties.getProperty("NOTION_TOKEN", null);
+            String slackChannelId = properties.getProperty("SLACK_CHANNEL_ID", null);
+            String slackBotToken = properties.getProperty("SLACK_BOT_TOKEN", null);
 
             // Fill HashMap
             secrets.put("notionDatabaseId", notionDatabaseId);
             secrets.put("notionToken", notionToken);
+            secrets.put("slackBotToken", slackBotToken);
+            secrets.put("slackChannelId", slackChannelId);
             
             return secrets;
         } catch (IOException e) {
