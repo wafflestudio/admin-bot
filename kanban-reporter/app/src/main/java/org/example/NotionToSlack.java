@@ -66,7 +66,14 @@ public class NotionToSlack {
                 lineTwo += "이 없습니다. 해당 속성을 채워주세요!";
             }
 
-            return lineOne + lineTwo;
+            // Line 3
+            String lineThree = "";
+            if (dueState != DueState.LEFT_ENOUTH) {
+                lineThree += "\n";
+                lineThree += dueStateTodueString(dueState);
+            }
+
+            return lineOne + lineTwo + lineThree;
         }
         else return "";
     }
@@ -114,5 +121,9 @@ public class NotionToSlack {
             default:
                 return null;
         }
+    }
+
+    private String dueStateTodueString(DueState dueState) {
+        return dueState.toString();
     }
 }
