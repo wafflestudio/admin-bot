@@ -43,15 +43,20 @@ public class App {
             issues.add(issueProperties);
         }
 
-        // ?
+        // Get Text To Send To Slack
         NotionToSlack notionToSlack = new NotionToSlack();
-        notionToSlack.issuesToTexts(issues);
+        ArrayList<String> textsToSend = notionToSlack.issuesToTexts(issues);
 
         // Create Slack Thread
-        // SlackBot slackBot = new SlackBot(secrets.get("slackBotToken"), secrets.get("slackChannelId"));
-        // String threadTs = slackBot.createThread("Initial Test");
-        // Boolean success = slackBot.createComment(threadTs, "Initial Comment");
-        // System.out.println(success);
+        SlackBot slackBot = new SlackBot(secrets.get("slackBotToken"), secrets.get("slackChannelId"));
+        String threadTs = slackBot.createThread("Initial Test");
+
+        // Create Comments Into The Thread
+        Boolean success = true;
+        for (String comment : textsToSend) {
+            success = slackBot.createComment(threadTs, comment);
+        }
+        System.out.println(success);
     }
 
     private static Map<String, String> load_secrets(String environment) {

@@ -6,13 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NotionToSlack {
-    public void issuesToTexts(ArrayList<HashMap<String, String>> issues) {
+    public ArrayList<String> issuesToTexts(ArrayList<HashMap<String, String>> issues) {
+        ArrayList<String> result = new ArrayList<String>();
         for (HashMap<String,String> issue : issues) {
-            issueToText(issue);
+            result.add(issueToText(issue));
         }
+        return result;
     }
 
-    private void issueToText(HashMap<String,String> issue) {
+    private String issueToText(HashMap<String,String> issue) {
         Boolean noDue = checkNoDue(issue);
         Boolean noAssignees = checkNoAssignees(issue);
         Boolean noTitle = checkNoTitle(issue);
@@ -34,8 +36,25 @@ public class NotionToSlack {
         Boolean toMakeComment = (propertyAbsence || (dueState != DueState.LEFT_ENOUTH));
         if (toMakeComment) {
             // Line 1
+            String assigneesString = "";
+            Integer assigneeNumber = 0;
+            while (true) {
+                assigneeNumber++;
+                String notionId = issue.getOrDefault("assignee" + assigneeNumber, null);
+                if (notionId == null) break;
+                else {
+                    String slackId = notionIdToSlackId(notionId);
+                    if (slackId == null) continue;
+                    else {
+                        assigneesString += ("<@" + slackId + "> ");
+                    }
+                }
+            }
             String issueLink = "https://www.notion.so/" + issue.getOrDefault("id", "").replace("-", "");
+            String lineOne = String.format("%s <%s|%s>", assigneesString, issueLink, issue.getOrDefault("title", ""));
+            return lineOne;
         }
+        else return "";
     }
 
     private Boolean checkNoDue(HashMap<String,String> issue) {
@@ -71,5 +90,15 @@ public class NotionToSlack {
 
     private enum DueState {
         LEFT_ENOUTH, ONE_DAY_LEFT, THE_DAY, EXCEEDED_A_LITTLE, EXCEEDED_TOO_MUCH
+    }
+
+    private String notionIdToSlackId(String notionId) {
+        switch (notionId) {
+            case "b5d64ee2-1da8-4eb5-a359-e96da5c99a32":
+                return "plgafhd";
+        
+            default:
+                return null;
+        }
     }
 }
