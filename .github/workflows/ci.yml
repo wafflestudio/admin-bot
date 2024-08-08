@@ -8,7 +8,7 @@ on:
 
 jobs:
     build:
-        name: Test Build and Run Dev
+        name: Test Build and Run Dev For Kanban Reporter
         timeout-minutes: 15
         runs-on: ubuntu-latest
 
@@ -22,8 +22,11 @@ jobs:
                 java-version: '22'
                 distribution: 'adopt'
 
+          - name: Set Permissions For Gradlew
+            run: chmod +x ./kanban-reporter/gradlew
+
           - name: Clean Build
-            run: ./gradlew clean
+            run: ./kanban-reporter/gradlew clean
 
           - name: Setup config.properties (dev)
             run: |
@@ -40,10 +43,10 @@ jobs:
                 EOF
 
           - name: Refresh Dependencies
-            run: ./gradlew --refresh-dependencies
+            run: ./kanban-reporter/gradlew --refresh-dependencies
         
           - name: Build Test
-            run: ./gradlew build
+            run: ./kanban-reporter/gradlew build
         
           - name: Run Dev
-            run: env=dev ./gradlew run
+            run: env=dev ./kanban-reporter/gradlew run
