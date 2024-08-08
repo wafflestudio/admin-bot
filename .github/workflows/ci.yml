@@ -1,0 +1,49 @@
+name: CI
+
+on:
+    pull_request:
+        branches: [main]
+    push:
+        branches: [main]
+
+jobs:
+    build:
+        name: Test Build and Run Dev
+        timeout-minutes: 15
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+
+          - name: Setup Java
+            uses: actions/setup-java@v3
+            with:
+                java-version: '22'
+                distribution: 'adopt'
+
+          - name: Clean Build
+            run: ./gradlew clean
+
+          - name: Setup config.properties (dev)
+            run: |
+                mkdir -p ./app/src/main/resources/dev
+                cat << EOF > ./app/src/main/resources/dev/config.properties
+                ${{ secrets.config_properties_dev }}
+                EOF
+
+          - name: Setup filter.json (dev)
+            run: |
+                mkdir -p ./app/src/main/resources/dev
+                cat << EOF > ./app/src/main/resources/dev/filter.json
+                ${{ secrets.filter_json_dev }}
+                EOF
+
+          - name: Refresh Dependencies
+            run: ./gradlew --refresh-dependencies
+        
+          - name: Build Test
+            run: ./gradlew build
+        
+          - name: Run Dev
+            run: env=dev ./gradlew run
