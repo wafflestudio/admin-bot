@@ -19,6 +19,7 @@ public class App {
         if (environment == null) {
             environment = "dev";
         }
+        System.out.println(environment);
         
         // Read Secrets
         Map<String, String> secrets = new HashMap<>();

@@ -1,0 +1,60 @@
+name: send-kanban-reporter
+
+on:
+  schedule:
+    - cron: "40 06 * * *"
+  workflow_dispatch:
+
+jobs:
+  cron:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+            java-version: '22'
+            distribution: 'adopt'
+
+      - name: Set Permissions For Gradlew
+        run: chmod +x ./kanban-reporter/gradlew
+
+      - name: Clean Build
+        run: |
+            cd kanban-reporter
+            ./gradlew clean
+
+      - name: Setup config.properties (prod)
+        run: |
+            cd kanban-reporter
+            mkdir -p ./app/src/main/resources/prod
+            cat << EOF > ./app/src/main/resources/prod/config.properties
+            ${{ secrets.config_properties_prod }}
+            EOF
+
+      - name: Setup filter.json (prod)
+        run: |
+            cd kanban-reporter
+            mkdir -p ./app/src/main/resources/prod
+            cat << EOF > ./app/src/main/resources/prod/filter.json
+            ${{ secrets.filter_json_prod }}
+            EOF
+
+      - name: Refresh Dependencies
+        run: |
+            cd kanban-reporter
+            ./gradlew --refresh-dependencies
+        
+      - name: Build Test
+        run: |
+            cd kanban-reporter
+            ./gradlew build
+        
+      - name: Run Dev
+        run: |
+            cd kanban-reporter
+            env=prod ./gradlew run
