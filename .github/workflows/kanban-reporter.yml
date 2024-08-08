@@ -54,7 +54,7 @@ jobs:
             cd kanban-reporter
             ./gradlew build
         
-      - name: Run Dev
+      - name: Run Prod
         run: |
             cd kanban-reporter
             env=prod ./gradlew run
