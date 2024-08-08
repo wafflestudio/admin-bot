@@ -45,10 +45,16 @@ jobs:
                 EOF
 
           - name: Refresh Dependencies
-            run: ./kanban-reporter/gradlew --refresh-dependencies
+            run: |
+                cd kanban-reporter
+                ./gradlew --refresh-dependencies
         
           - name: Build Test
-            run: ./kanban-reporter/gradlew build
+            run: |
+                cd kanban-reporter
+                ./gradlew build
         
           - name: Run Dev
-            run: env=dev ./kanban-reporter/gradlew run
+            run: |
+                cd kanban-reporter
+                env=dev ./gradlew clean
