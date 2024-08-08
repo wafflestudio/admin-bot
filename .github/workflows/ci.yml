@@ -32,6 +32,7 @@ jobs:
 
           - name: Setup config.properties (dev)
             run: |
+                cd kanban-reporter
                 mkdir -p ./app/src/main/resources/dev
                 cat << EOF > ./app/src/main/resources/dev/config.properties
                 ${{ secrets.config_properties_dev }}
@@ -39,6 +40,7 @@ jobs:
 
           - name: Setup filter.json (dev)
             run: |
+                cd kanban-reporter
                 mkdir -p ./app/src/main/resources/dev
                 cat << EOF > ./app/src/main/resources/dev/filter.json
                 ${{ secrets.filter_json_dev }}
