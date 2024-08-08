@@ -1,7 +1,7 @@
 package org.example;
 
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -59,19 +59,15 @@ public class NotionDatabaseRead {
     }
 
     private JSONObject filterRead() {
-        // Set path for filter.json
-        String fileName = "app/src/main/resources/" + ENVIRONMENT + "/filter.json";
-
-        // Test
-        // File file = new File(fileName);
-        // System.out.println("Trying to read file: " + file.getAbsolutePath());
-        
-        // Read filter.json
+        // JSONParser 객체 생성
         JSONParser parser = new JSONParser();
-        
-        try {
-            FileReader reader = new FileReader(fileName);
-            JSONObject jsonObject = (JSONObject) parser.parse(reader);
+
+        // ClassLoader를 사용하여 리소스 파일 읽기
+        try (InputStream input = App.class.getClassLoader().getResourceAsStream(ENVIRONMENT + "/filter.json")) {
+            if (input == null) {
+                return null;
+            }
+            JSONObject jsonObject = (JSONObject) parser.parse(new InputStreamReader(input, "UTF-8"));
             return jsonObject;
         } catch (Exception e) {
             return null;
