@@ -2,7 +2,7 @@ name: send-kanban-reporter
 
 on:
   schedule:
-    - cron: "40 06 * * *"
+    - cron: "45 06 * * *"
   workflow_dispatch:
 
 jobs:
