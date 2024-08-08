@@ -60,18 +60,14 @@ public class App {
     }
 
     private static Map<String, String> load_secrets(String environment) {
-        // Set path for config.properties
-        String configFileName = "app/src/main/resources/" + environment + "/config.properties";
-
-        // Test
-        // File file = new File(configFileName);
-        // System.out.println("Trying to read file: " + file.getAbsolutePath());
-
         // Load Properties
         Properties properties = new Properties();
 
-        try (InputStream input = new FileInputStream(configFileName)) {
+        try (InputStream input = App.class.getClassLoader().getResourceAsStream(environment + "/config.properties")) {
             Map<String, String> secrets = new HashMap<>();
+            if (input == null) {
+                return secrets;
+            }
 
             // Load properties file
             properties.load(input);
