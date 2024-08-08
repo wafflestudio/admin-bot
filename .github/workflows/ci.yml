@@ -57,4 +57,4 @@ jobs:
           - name: Run Dev
             run: |
                 cd kanban-reporter
-                env=dev ./gradlew clean
+                env=dev ./gradlew run
