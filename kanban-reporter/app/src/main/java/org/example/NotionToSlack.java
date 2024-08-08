@@ -115,9 +115,24 @@ public class NotionToSlack {
 
     private String notionIdToSlackId(String notionId) {
         switch (notionId) {
-            case "b5d64ee2-1da8-4eb5-a359-e96da5c99a32":
-                return "plgafhd";
-        
+            case "b5d64ee2-1da8-4eb5-a359-e96da5c99a32": // LHD
+                return "U06BEHTT2M8";
+            case "84254454-3dc7-44e1-808f-7fe2b363a217": // SDY
+                return "U04EC1QEP6V";
+            case "851916c0-e459-4cb7-93e9-6385c0875ca5": // LSM
+                return "U06B01WCLKH";
+            case "43786bb7-9fd1-4afa-82a4-e0dc89cd2b3f": // SWJ
+                return "U04EC1TMR0R";
+            case "542fe32c-491e-40f9-ab67-070ed261a5ed": // WHJ
+                return "U04E1RX2Y20";
+            case "4b9b7d3c-59e9-41f6-9beb-6f11bff8352b": // NGT
+                return "U06B01WQQK1";
+            case "ad0c202e-ca11-456d-91d2-a1d44b13a8a8": // JJA
+                return "U06BT6ZU741";
+            case "e3c4232e-41ce-4189-90f4-121c7cda69f8": // CYJ
+                return "U04F0NCC9L4";
+            case "6812fadd-2cbd-42f2-bc2c-0fc11eb7efed": // JYJ
+                return "U05RMKRK1HR";
             default:
                 return null;
         }
