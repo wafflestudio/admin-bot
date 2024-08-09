@@ -40,13 +40,14 @@ public class Main {
         ArrayList<String> textsToSend = notionToSlack.issuesToTexts(issues);
 
         // Create Slack Thread
-        SlackBot slackBot = new SlackBot(GetResources.getProperty("SLACK_BOT_TOKEN", environment), GetResources.getProperty("SLACK_CHANNEL_ID", environment));
-        String threadTs = slackBot.createThread(GetResources.getProperty("THREAD_NAME"));
+        String slackBotToken = GetResources.getProperty("SLACK_BOT_TOKEN", environment);
+        String slackChannelId = GetResources.getProperty("SLACK_CHANNEL_ID", environment);
+        String threadTs = SlackBot.createThread(slackBotToken, slackChannelId, GetResources.getProperty("THREAD_NAME"));
 
         // Create Comments Into The Thread
         Boolean success = true;
         for (String comment : textsToSend) {
-            success = slackBot.createComment(threadTs, comment);
+            success = SlackBot.createComment(slackBotToken, slackChannelId, threadTs, comment);
         }
         System.out.println(success);
     }
