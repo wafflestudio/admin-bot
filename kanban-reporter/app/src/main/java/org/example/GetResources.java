@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class GetResources {
@@ -13,7 +14,8 @@ public class GetResources {
             if (input == null) return "";
 
             // Load property
-            properties.load(input);
+            InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+            properties.load(reader);
             return properties.getProperty(key, "");
         } catch (IOException e) {
             return "";

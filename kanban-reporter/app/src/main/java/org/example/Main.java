@@ -42,7 +42,7 @@ public class Main {
 
         // Create Slack Thread
         SlackBot slackBot = new SlackBot(GetResources.getProperty("SLACK_BOT_TOKEN", environment), GetResources.getProperty("SLACK_CHANNEL_ID", environment));
-        String threadTs = slackBot.createThread("Initial Test");
+        String threadTs = slackBot.createThread(GetResources.getProperty("THREAD_NAME"));
 
         // Create Comments Into The Thread
         Boolean success = true;
