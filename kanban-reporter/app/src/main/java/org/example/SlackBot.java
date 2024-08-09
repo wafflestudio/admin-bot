@@ -5,20 +5,12 @@ import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
 
 public class SlackBot {
-    private final String SLACK_BOT_TOKEN;
-    private final String SLACK_CHANNEL_ID;
-
-    public SlackBot(String token, String channelId) {
-        SLACK_BOT_TOKEN = token;
-        SLACK_CHANNEL_ID = channelId;
-    }
-
-    public String createThread(String title) {
+    public static String createThread(String slackBotToken, String slackChannelId, String title) {
         Slack slack = Slack.getInstance();
 
         ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-            .token(SLACK_BOT_TOKEN)
-            .channel(SLACK_CHANNEL_ID)
+            .token(slackBotToken)
+            .channel(slackChannelId)
             .text(title)
             .build();
 
@@ -35,12 +27,12 @@ public class SlackBot {
         }
     }
 
-    public Boolean createComment(String parentTs, String content) {
+    public static Boolean createComment(String slackBotToken, String slackChannelId, String parentTs, String content) {
         Slack slack = Slack.getInstance();
 
         ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-            .token(SLACK_BOT_TOKEN)
-            .channel(SLACK_CHANNEL_ID)
+            .token(slackBotToken)
+            .channel(slackChannelId)
             .text(content)
             .threadTs(parentTs)
             .build();
