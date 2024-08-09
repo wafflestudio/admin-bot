@@ -5,7 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class NotionToSlack {
+public class IssuesToSlackText {
     public static ArrayList<String> issuesToTexts(String environment, ArrayList<HashMap<String, String>> issues) {
         ArrayList<String> result = new ArrayList<String>();
         for (HashMap<String,String> issue : issues) {
