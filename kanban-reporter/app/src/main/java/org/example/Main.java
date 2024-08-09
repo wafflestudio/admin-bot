@@ -1,7 +1,8 @@
 package org.example;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import org.example.records.Issue;
 
 import com.google.gson.JsonArray;
 
@@ -19,7 +20,7 @@ public class Main {
         JsonArray database = NotionDatabaseRead.readDatabase(environment, GetResources.getProperty("NOTION_TOKEN", environment), GetResources.getProperty("NOTION_DATABASE_ID", environment));
         
         // Organize Database To Issue List
-        ArrayList<HashMap<String, String>> issues = NotionDatabaseToIssues.databaseToIssues(database);
+        ArrayList<Issue> issues = NotionDatabaseToIssues.databaseToIssues(database);
 
         // Transform Issue List To Texts For Slack
         ArrayList<String> textsToSend = IssuesToSlackText.issuesToTexts(environment, issues);

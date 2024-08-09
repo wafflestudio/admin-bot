@@ -3,18 +3,19 @@ package org.example;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import org.example.records.Issue;
 
 public class IssuesToSlackText {
-    public static ArrayList<String> issuesToTexts(String environment, ArrayList<HashMap<String, String>> issues) {
+    public static ArrayList<String> issuesToTexts(String environment, ArrayList<Issue> issues) {
         ArrayList<String> result = new ArrayList<String>();
-        for (HashMap<String,String> issue : issues) {
+        for (Issue issue : issues) {
             result.add(issueToText(environment, issue));
         }
         return result;
     }
 
-    private static String issueToText(String environment, HashMap<String,String> issue) {
+    private static String issueToText(String environment, Issue issue) {
         Boolean noDue = checkNoDue(issue);
         Boolean noAssignees = checkNoAssignees(issue);
         Boolean noTitle = checkNoTitle(issue);
@@ -23,11 +24,11 @@ public class IssuesToSlackText {
         DueState dueState = DueState.LEFT_ENOUTH;
         String due = null;
         if (!noDue) {
-            if (issue.getOrDefault("end", null) == null) {
-                due = issue.getOrDefault("start", "2099-12-31").substring(0, 10);
+            if (issue.end() == null) {
+                due = issue.getStart().substring(0, 10);
             }
             else {
-                due = issue.getOrDefault("end", "2099-12-31").substring(0, 10);
+                due = issue.getEnd().substring(0, 10);
             }
 
             dueState = decideDueState(due);
@@ -39,21 +40,16 @@ public class IssuesToSlackText {
 
             // Line 1
             String assigneesString = "";
-            Integer assigneeNumber = 0;
-            while (true) {
-                assigneeNumber++;
-                String notionId = issue.getOrDefault("assignee" + assigneeNumber, null);
-                if (notionId == null) break;
+            for (String notionId : issue.getAssignees()) {
+                String slackId = notionIdToSlackId(environment, notionId);
+                if (slackId == null) continue;
                 else {
-                    String slackId = notionIdToSlackId(environment, notionId);
-                    if (slackId == null) continue;
-                    else {
-                        assigneesString += slackIdToSlackTag(environment, slackId);
-                    }
+                    assigneesString += slackIdToSlackTag(environment, slackId);
                 }
             }
-            String issueLink = GetResources.getProperty("KANBAN_BASE_URL") + issue.getOrDefault("id", "").replace("-", "");
-            String lineOne = String.format("%s <%s|%s>", assigneesString, issueLink, issue.getOrDefault("title", ""));
+
+            String issueLink = GetResources.getProperty("KANBAN_BASE_URL") + issue.getId().replace("-", "");
+            String lineOne = String.format("%s <%s|%s>", assigneesString, issueLink, issue.getTitle());
 
             // Line 2
             String lineTwo = "";
@@ -78,19 +74,17 @@ public class IssuesToSlackText {
         else return "";
     }
 
-    private static Boolean checkNoDue(HashMap<String,String> issue) {
-        String start = issue.getOrDefault("start",  null);
-        return (start == null);
+    private static Boolean checkNoDue(Issue issue) {
+        return (issue.start() == null);
     }
 
-    private static Boolean checkNoAssignees(HashMap<String,String> issue) {
-        String firstAssignees = issue.getOrDefault("assignee1",  null);
-        return (firstAssignees == null);
+    private static Boolean checkNoAssignees(Issue issue) {
+        ArrayList<String> assignees = issue.assignees();
+        return (assignees == null || assignees.isEmpty());
     }
 
-    private static Boolean checkNoTitle(HashMap<String,String> issue) {
-        String title = issue.getOrDefault("title",  null);
-        return (title == null);
+    private static Boolean checkNoTitle(Issue issue) {
+        return (issue.title() == null);
     }
 
     private static DueState decideDueState(String due) {
