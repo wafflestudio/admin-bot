@@ -36,7 +36,7 @@ public class NotionDatabaseRead {
             RequestBody body = RequestBody.create(bodyString, JSON);
 
             Request request = new Request.Builder()
-                .url("https://api.notion.com/v1/databases/" + DATABASE_ID + "/query")
+                .url(GetResources.getProperty("NOTIONAPI_BASE_URL") + DATABASE_ID + "/query")
                 .addHeader("Authorization", "Bearer " + NOTION_TOKEN)
                 .addHeader("Notion-Version", "2022-06-28")
                 .addHeader("Content-Type", "application/json")
