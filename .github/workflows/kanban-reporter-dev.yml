@@ -2,6 +2,11 @@ name: send-kanban-reporter-dev
 
 on:
   workflow_call:
+    secrets:
+      config_properties_dev:
+        required: true
+      filter_json_dev:
+        required: true
 
 jobs:
   build:

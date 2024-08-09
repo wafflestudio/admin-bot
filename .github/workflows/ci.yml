@@ -7,3 +7,7 @@ on:
 jobs:
   call-kanban-reporter-dev:
     uses: ./.github/workflows/kanban-reporter-dev.yml
+    secrets: 
+      config_properties_dev: ${{ secrets.config_properties_dev }}
+      filter_json_dev:  ${{ secrets.filter_json_dev }}
+      
