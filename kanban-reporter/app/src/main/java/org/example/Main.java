@@ -27,7 +27,7 @@ public class Main {
         // System.out.println(secrets);
 
         // Read Notion and Get Issues
-        NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, secrets.get("notionToken"), secrets.get("notionDatabaseId"));
+        NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, GetResources.getProperty("NOTION_TOKEN", "dev"), GetResources.getProperty("NOTION_DATABASE_ID", "dev"));
         JsonArray database = notionDatabaseRead.readDatabase();
         
         // Filter Needed Properties
