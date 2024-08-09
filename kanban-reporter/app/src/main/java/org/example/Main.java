@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         // Read Environment, Default = dev
         String environment = System.getenv("env");
-        if (environment == null || (environment != "dev" && environment != "prod")) {
+        if (environment == null || (!environment.equals("dev") && !environment.equals("prod"))) {
             environment = "dev";
         }
         System.out.println(environment);
