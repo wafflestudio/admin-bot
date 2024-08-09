@@ -11,7 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class App {
+public class Main {
 
     public static void main(String[] args) {
         // Read Environment, Default = dev
@@ -65,7 +65,7 @@ public class App {
         // Load Properties
         Properties properties = new Properties();
 
-        try (InputStream input = App.class.getClassLoader().getResourceAsStream(environment + "/config.properties")) {
+        try (InputStream input = Main.class.getClassLoader().getResourceAsStream(environment + "/config.properties")) {
             Map<String, String> secrets = new HashMap<>();
             if (input == null) {
                 return secrets;

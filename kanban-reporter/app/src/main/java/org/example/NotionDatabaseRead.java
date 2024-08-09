@@ -63,7 +63,7 @@ public class NotionDatabaseRead {
         JSONParser parser = new JSONParser();
 
         // ClassLoader를 사용하여 리소스 파일 읽기
-        try (InputStream input = App.class.getClassLoader().getResourceAsStream(ENVIRONMENT + "/filter.json")) {
+        try (InputStream input = Main.class.getClassLoader().getResourceAsStream(ENVIRONMENT + "/filter.json")) {
             if (input == null) {
                 return null;
             }
