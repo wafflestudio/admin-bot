@@ -21,17 +21,16 @@ public class Main {
         JsonArray database = NotionDatabaseRead.readDatabase(environment, GetResources.getProperty("NOTION_TOKEN", environment), GetResources.getProperty("NOTION_DATABASE_ID", environment));
         
         // Filter Needed Properties
-        KanbanJsonToProperty notionDatabaseToProperties = new KanbanJsonToProperty();
         ArrayList<HashMap<String, String>> issues = new ArrayList<HashMap<String, String>>();
 
         for (JsonElement jsonElement : database) { // fix: 함수 분리
             HashMap<String, String> issueProperties = new HashMap<String, String>();
             JsonObject issue = jsonElement.getAsJsonObject();
-            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "id"));
-            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "title"));
-            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "start"));
-            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "end"));
-            issueProperties.putAll(notionDatabaseToProperties.getProperty(issue, "assignees"));
+            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "id"));
+            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "title"));
+            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "start"));
+            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "end"));
+            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "assignees"));
             issues.add(issueProperties);
         }
 

@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class KanbanJsonToProperty {
-    public HashMap<String, String> getProperty(JsonObject data, String propertyName) {
+    public static HashMap<String, String> getProperty(JsonObject data, String propertyName) {
         String dir;
         HashMap<String, String> result = new HashMap<String, String>();
         switch (propertyName) {
@@ -37,7 +37,7 @@ public class KanbanJsonToProperty {
         return result;
     }
 
-    private String getPropertyByFullDir(JsonObject data, String dir) {
+    private static String getPropertyByFullDir(JsonObject data, String dir) {
         JsonObject curData = data.deepCopy();
         String[] dirs = dir.split("/");
 
@@ -52,7 +52,7 @@ public class KanbanJsonToProperty {
         }
     }
 
-    private JsonObject getPropertyByNextDir(JsonObject data, String nextDir) {
+    private static JsonObject getPropertyByNextDir(JsonObject data, String nextDir) {
         String[] dirs = nextDir.split("-");
 
         // fix: 코드가 살짝 좋지 않아 보인다..
@@ -75,7 +75,7 @@ public class KanbanJsonToProperty {
     }
 
     // fix: 당장 구현을 위해 따로 분리했는데, 일반화를 할 수만 있다면..
-    private HashMap<String, String> getAssignees(JsonObject data, String dir) {
+    private static HashMap<String, String> getAssignees(JsonObject data, String dir) {
         JsonObject curData = data.deepCopy();
         HashMap<String, String> result = new HashMap<String, String>();
 
