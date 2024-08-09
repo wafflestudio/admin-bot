@@ -2,5 +2,6 @@
 /app/build/
 *.class
 /bin
-/app/src/main/resources/
+**/resources/dev
+**/resources/prod
 Test.java
