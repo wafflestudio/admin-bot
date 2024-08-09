@@ -58,18 +58,18 @@ public class NotionToSlack {
                     }
                 }
             }
-            String issueLink = "https://www.notion.so/" + issue.getOrDefault("id", "").replace("-", "");
+            String issueLink = GetResources.getProperty("KANBAN_BASE_URL") + issue.getOrDefault("id", "").replace("-", "");
             String lineOne = String.format("%s <%s|%s>", assigneesString, issueLink, issue.getOrDefault("title", ""));
 
             // Line 2
             String lineTwo = "";
             if (propertyAbsence) {
                 lineTwo += "\n";
-                if (noTitle) lineTwo += "제목, ";
-                if (noAssignees) lineTwo += "배정, ";
-                if (noDue) lineTwo += "기한, ";
+                if (noTitle) lineTwo += GetResources.getProperty("ABSENCE_TITLE");
+                if (noAssignees) lineTwo += GetResources.getProperty("ABSENCE_ASSIGNEE");
+                if (noDue) lineTwo += GetResources.getProperty("ABSENCE_DUE");;
                 lineTwo = lineTwo.replaceAll(", $", "");
-                lineTwo += "이 없습니다. 해당 속성을 채워주세요!";
+                lineTwo += GetResources.getProperty("ABSENCE_SOMETHING");;
             }
 
             // Line 3
@@ -116,28 +116,34 @@ public class NotionToSlack {
     }
 
     private String notionIdToSlackId(String notionId) {
-        switch (notionId) {
-            case "b5d64ee2-1da8-4eb5-a359-e96da5c99a32": // LHD
-                return "U06BEHTT2M8";
-            case "84254454-3dc7-44e1-808f-7fe2b363a217": // SDY
-                return "U04EC1QEP6V";
-            case "851916c0-e459-4cb7-93e9-6385c0875ca5": // LSM
-                return "U06B01WCLKH";
-            case "43786bb7-9fd1-4afa-82a4-e0dc89cd2b3f": // SWJ
-                return "U04EC1TMR0R";
-            case "542fe32c-491e-40f9-ab67-070ed261a5ed": // WHJ
-                return "U04E1RX2Y20";
-            case "4b9b7d3c-59e9-41f6-9beb-6f11bff8352b": // NKT
-                return "U06B01WQQK1";
-            case "ad0c202e-ca11-456d-91d2-a1d44b13a8a8": // JJA
-                return "U06BT6ZU741";
-            case "e3c4232e-41ce-4189-90f4-121c7cda69f8": // CYJ
-                return "U04F0NCC9L4";
-            case "6812fadd-2cbd-42f2-bc2c-0fc11eb7efed": // JYJ
-                return "U05RMKRK1HR";
-            default:
-                return null;
+        if (notionId.equals(GetResources.getProperty("NOTION_ID_LHD", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_LHD", ENVIROMENT);
         }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_SDY", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_SDY", ENVIROMENT);
+        }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_LSM", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_LSM", ENVIROMENT);
+        }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_SWJ", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_SWJ", ENVIROMENT);
+        }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_WHJ", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_WHJ", ENVIROMENT);
+        }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_NKT", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_NKT", ENVIROMENT);
+        }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_JJA", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_JJA", ENVIROMENT);
+        }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_CYJ", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_CYJ", ENVIROMENT);
+        }
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_JYJ", ENVIROMENT))){
+            return GetResources.getProperty("SLACK_ID_JYJ", ENVIROMENT);
+        }
+        else return null;
     }
 
     private String dueStateTodueString(DueState dueState) {
