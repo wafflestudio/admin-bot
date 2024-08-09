@@ -1,17 +1,13 @@
 package org.example;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class App {
+public class Main {
 
     public static void main(String[] args) {
         // Read Environment, Default = dev
@@ -20,15 +16,9 @@ public class App {
             environment = "dev";
         }
         System.out.println(environment);
-        
-        // Read Secrets
-        Map<String, String> secrets = new HashMap<>();
-        secrets = load_secrets(environment);
-        // System.out.println(secrets);
 
         // Read Notion and Get Issues
-        NotionDatabaseRead notionDatabaseRead = new NotionDatabaseRead(environment, secrets.get("notionToken"), secrets.get("notionDatabaseId"));
-        JsonArray database = notionDatabaseRead.readDatabase();
+        JsonArray database = NotionDatabaseRead.readDatabase(environment, GetResources.getProperty("NOTION_TOKEN", environment), GetResources.getProperty("NOTION_DATABASE_ID", environment));
         
         // Filter Needed Properties
         NotionDatabaseToProperties notionDatabaseToProperties = new NotionDatabaseToProperties();
@@ -50,8 +40,8 @@ public class App {
         ArrayList<String> textsToSend = notionToSlack.issuesToTexts(issues);
 
         // Create Slack Thread
-        SlackBot slackBot = new SlackBot(secrets.get("slackBotToken"), secrets.get("slackChannelId"));
-        String threadTs = slackBot.createThread("Initial Test");
+        SlackBot slackBot = new SlackBot(GetResources.getProperty("SLACK_BOT_TOKEN", environment), GetResources.getProperty("SLACK_CHANNEL_ID", environment));
+        String threadTs = slackBot.createThread(GetResources.getProperty("THREAD_NAME"));
 
         // Create Comments Into The Thread
         Boolean success = true;
@@ -59,36 +49,5 @@ public class App {
             success = slackBot.createComment(threadTs, comment);
         }
         System.out.println(success);
-    }
-
-    private static Map<String, String> load_secrets(String environment) {
-        // Load Properties
-        Properties properties = new Properties();
-
-        try (InputStream input = App.class.getClassLoader().getResourceAsStream(environment + "/config.properties")) {
-            Map<String, String> secrets = new HashMap<>();
-            if (input == null) {
-                return secrets;
-            }
-
-            // Load properties file
-            properties.load(input);
-
-            // Get properties
-            String notionDatabaseId = properties.getProperty("NOTION_DATABASE_ID", null);
-            String notionToken = properties.getProperty("NOTION_TOKEN", null);
-            String slackChannelId = properties.getProperty("SLACK_CHANNEL_ID", null);
-            String slackBotToken = properties.getProperty("SLACK_BOT_TOKEN", null);
-
-            // Fill HashMap
-            secrets.put("notionDatabaseId", notionDatabaseId);
-            secrets.put("notionToken", notionToken);
-            secrets.put("slackBotToken", slackBotToken);
-            secrets.put("slackChannelId", slackChannelId);
-            
-            return secrets;
-        } catch (IOException e) {
-            return new HashMap<>();
-        }
     }
 }
