@@ -1,5 +1,4 @@
 # admin-bot
-
 wafflestudio team-admin-2024의 Admin Bot
 
 ## Secrets
