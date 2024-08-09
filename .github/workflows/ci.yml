@@ -1,62 +1,83 @@
 name: CI
 
 on:
-    pull_request:
-        branches: [main]
-    push:
-        branches: [main]
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
 
 jobs:
-    build:
-        name: Test Build and Run Dev For Kanban Reporter
-        timeout-minutes: 15
-        runs-on: ubuntu-latest
+  conditional-exit:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.determine.outputs.should-run }}
 
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v3
+    steps:
+      - name: Check PR Title or Commit Message
+        id: determine
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.title }}" == release* ]]; then
+            echo "should-run=false" >> $GITHUB_ENV
+            exit 0
+          elif [[ "${{ github.event_name }}" == "push" && "${{ github.event.head_commit.message }}" == release* ]]; then
+            echo "should-run=false" >> $GITHUB_ENV
+            exit 0
+          else
+            echo "should-run=true" >> $GITHUB_ENV
+          fi
 
-          - name: Setup Java
-            uses: actions/setup-java@v3
-            with:
-                java-version: '22'
-                distribution: 'adopt'
+  build:
+    name: Test Build and Run Dev For Kanban Reporter
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    needs: conditional-exit
 
-          - name: Set Permissions For Gradlew
-            run: chmod +x ./kanban-reporter/gradlew
+    if: needs.conditional-exit.outputs.should-run == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-          - name: Clean Build
-            run: |
-                cd kanban-reporter
-                ./gradlew clean
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '22'
+          distribution: 'adopt'
 
-          - name: Setup config.properties (dev)
-            run: |
-                cd kanban-reporter
-                mkdir -p ./app/src/main/resources/dev
-                cat << EOF > ./app/src/main/resources/dev/config.properties
-                ${{ secrets.config_properties_dev }}
-                EOF
+      - name: Set Permissions For Gradlew
+        run: chmod +x ./kanban-reporter/gradlew
 
-          - name: Setup filter.json (dev)
-            run: |
-                cd kanban-reporter
-                mkdir -p ./app/src/main/resources/dev
-                cat << EOF > ./app/src/main/resources/dev/filter.json
-                ${{ secrets.filter_json_dev }}
-                EOF
+      - name: Clean Build
+        run: |
+          cd kanban-reporter
+          ./gradlew clean
 
-          - name: Refresh Dependencies
-            run: |
-                cd kanban-reporter
-                ./gradlew --refresh-dependencies
+      - name: Setup config.properties (dev)
+        run: |
+          cd kanban-reporter
+          mkdir -p ./app/src/main/resources/dev
+          cat << EOF > ./app/src/main/resources/dev/config.properties
+          ${{ secrets.config_properties_dev }}
+          EOF
+
+      - name: Setup filter.json (dev)
+        run: |
+          cd kanban-reporter
+          mkdir -p ./app/src/main/resources/dev
+          cat << EOF > ./app/src/main/resources/dev/filter.json
+          ${{ secrets.filter_json_dev }}
+          EOF
+
+      - name: Refresh Dependencies
+        run: |
+          cd kanban-reporter
+          ./gradlew --refresh-dependencies
         
-          - name: Build Test
-            run: |
-                cd kanban-reporter
-                ./gradlew build
+      - name: Build Test
+        run: |
+          cd kanban-reporter
+          ./gradlew build
         
-          - name: Run Dev
-            run: |
-                cd kanban-reporter
-                env=dev ./gradlew run
+      - name: Run Dev
+        run: |
+          cd kanban-reporter
+          env=dev ./gradlew run
