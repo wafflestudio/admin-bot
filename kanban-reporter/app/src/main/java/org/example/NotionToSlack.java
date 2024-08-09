@@ -147,7 +147,7 @@ public class NotionToSlack {
     }
 
     private String dueStateTodueString(DueState dueState) {
-        return dueState.toString();
+        return GetResources.getProperty(dueState.toString());
     }
 
     private String slackIdToSlackTag(String slackId) {
