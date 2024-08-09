@@ -1,11 +1,5 @@
 package org.example;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -32,7 +26,7 @@ public class NotionDatabaseRead {
             OkHttpClient client = new OkHttpClient();
             
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            String bodyString = filterRead().toJSONString();
+            String bodyString = GetResources.getQuery(ENVIRONMENT).toJSONString();
             RequestBody body = RequestBody.create(bodyString, JSON);
 
             Request request = new Request.Builder()
@@ -53,22 +47,6 @@ public class NotionDatabaseRead {
             else {
                 return null;
             }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private JSONObject filterRead() {
-        // JSONParser 객체 생성
-        JSONParser parser = new JSONParser();
-
-        // ClassLoader를 사용하여 리소스 파일 읽기
-        try (InputStream input = Main.class.getClassLoader().getResourceAsStream(ENVIRONMENT + "/filter.json")) {
-            if (input == null) {
-                return null;
-            }
-            JSONObject jsonObject = (JSONObject) parser.parse(new InputStreamReader(input, "UTF-8"));
-            return jsonObject;
         } catch (Exception e) {
             return null;
         }
