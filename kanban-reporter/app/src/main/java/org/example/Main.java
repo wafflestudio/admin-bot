@@ -36,8 +36,7 @@ public class Main {
         }
 
         // Get Text To Send To Slack
-        NotionToSlack notionToSlack = new NotionToSlack(environment);
-        ArrayList<String> textsToSend = notionToSlack.issuesToTexts(issues);
+        ArrayList<String> textsToSend = NotionToSlack.issuesToTexts(environment, issues);
 
         // Create Slack Thread
         String slackBotToken = GetResources.getProperty("SLACK_BOT_TOKEN", environment);

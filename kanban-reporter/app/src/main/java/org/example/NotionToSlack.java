@@ -6,21 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NotionToSlack {
-    private final String ENVIROMENT;
-
-    public NotionToSlack(String environment) {
-        ENVIROMENT = environment;
-    }
-
-    public ArrayList<String> issuesToTexts(ArrayList<HashMap<String, String>> issues) {
+    public static ArrayList<String> issuesToTexts(String environment, ArrayList<HashMap<String, String>> issues) {
         ArrayList<String> result = new ArrayList<String>();
         for (HashMap<String,String> issue : issues) {
-            result.add(issueToText(issue));
+            result.add(issueToText(environment, issue));
         }
         return result;
     }
 
-    private String issueToText(HashMap<String,String> issue) {
+    private static String issueToText(String environment, HashMap<String,String> issue) {
         Boolean noDue = checkNoDue(issue);
         Boolean noAssignees = checkNoAssignees(issue);
         Boolean noTitle = checkNoTitle(issue);
@@ -51,10 +45,10 @@ public class NotionToSlack {
                 String notionId = issue.getOrDefault("assignee" + assigneeNumber, null);
                 if (notionId == null) break;
                 else {
-                    String slackId = notionIdToSlackId(notionId);
+                    String slackId = notionIdToSlackId(environment, notionId);
                     if (slackId == null) continue;
                     else {
-                        assigneesString += slackIdToSlackTag(slackId);
+                        assigneesString += slackIdToSlackTag(environment, slackId);
                     }
                 }
             }
@@ -84,22 +78,22 @@ public class NotionToSlack {
         else return "";
     }
 
-    private Boolean checkNoDue(HashMap<String,String> issue) {
+    private static Boolean checkNoDue(HashMap<String,String> issue) {
         String start = issue.getOrDefault("start",  null);
         return (start == null);
     }
 
-    private Boolean checkNoAssignees(HashMap<String,String> issue) {
+    private static Boolean checkNoAssignees(HashMap<String,String> issue) {
         String firstAssignees = issue.getOrDefault("assignee1",  null);
         return (firstAssignees == null);
     }
 
-    private Boolean checkNoTitle(HashMap<String,String> issue) {
+    private static Boolean checkNoTitle(HashMap<String,String> issue) {
         String title = issue.getOrDefault("title",  null);
         return (title == null);
     }
 
-    private DueState decideDueState(String due) {
+    private static DueState decideDueState(String due) {
         try {
             LocalDate dueDate = LocalDate.parse(due);
             LocalDate nowDate = LocalDate.now();
@@ -115,44 +109,44 @@ public class NotionToSlack {
         }
     }
 
-    private String notionIdToSlackId(String notionId) {
-        if (notionId.equals(GetResources.getProperty("NOTION_ID_LHD", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_LHD", ENVIROMENT);
+    private static String notionIdToSlackId(String environment, String notionId) {
+        if (notionId.equals(GetResources.getProperty("NOTION_ID_LHD", environment))){
+            return GetResources.getProperty("SLACK_ID_LHD", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_SDY", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_SDY", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_SDY", environment))){
+            return GetResources.getProperty("SLACK_ID_SDY", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_LSM", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_LSM", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_LSM", environment))){
+            return GetResources.getProperty("SLACK_ID_LSM", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_SWJ", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_SWJ", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_SWJ", environment))){
+            return GetResources.getProperty("SLACK_ID_SWJ", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_WHJ", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_WHJ", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_WHJ", environment))){
+            return GetResources.getProperty("SLACK_ID_WHJ", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_NKT", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_NKT", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_NKT", environment))){
+            return GetResources.getProperty("SLACK_ID_NKT", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_JJA", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_JJA", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_JJA", environment))){
+            return GetResources.getProperty("SLACK_ID_JJA", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_CYJ", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_CYJ", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_CYJ", environment))){
+            return GetResources.getProperty("SLACK_ID_CYJ", environment);
         }
-        else if (notionId.equals(GetResources.getProperty("NOTION_ID_JYJ", ENVIROMENT))){
-            return GetResources.getProperty("SLACK_ID_JYJ", ENVIROMENT);
+        else if (notionId.equals(GetResources.getProperty("NOTION_ID_JYJ", environment))){
+            return GetResources.getProperty("SLACK_ID_JYJ", environment);
         }
         else return null;
     }
 
-    private String dueStateTodueString(DueState dueState) {
+    private static String dueStateTodueString(DueState dueState) {
         return GetResources.getProperty(dueState.toString());
     }
 
-    private String slackIdToSlackTag(String slackId) {
-        if (ENVIROMENT == "prod") return ("<@" + slackId + "> ");
-        else if (ENVIROMENT == "dev") return ("@" + slackId + " ");
+    private static String slackIdToSlackTag(String environment, String slackId) {
+        if (environment == "prod") return ("<@" + slackId + "> ");
+        else if (environment == "dev") return ("@" + slackId + " ");
         else return "";
     }
 
