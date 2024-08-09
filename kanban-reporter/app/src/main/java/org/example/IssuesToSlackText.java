@@ -139,8 +139,8 @@ public class IssuesToSlackText {
     }
 
     private static String slackIdToSlackTag(String environment, String slackId) {
-        if (environment == "prod") return ("<@" + slackId + "> ");
-        else if (environment == "dev") return ("@" + slackId + " ");
+        if (environment.equals("prod")) return ("<@" + slackId + "> ");
+        else if (environment.equals("dev")) return ("@" + slackId + " ");
         else return "";
     }
 
