@@ -6,34 +6,28 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class NotionDatabaseToProperties {
-    private final String ID_DIR = "id";
-    private final String TITLE_DIR = "properties/이름/title-0/text/content";
-    private final String START_DIR = "properties/기한/date/start";
-    private final String END_DIR = "properties/기한/date/end";
-    private final String ASSIGNEES_DIR = "properties/배정/people";
-
     public HashMap<String, String> getProperty(JsonObject data, String propertyName) {
         String dir;
         HashMap<String, String> result = new HashMap<String, String>();
         switch (propertyName) {
             case "id":
-                dir = ID_DIR;
+                dir = GetResources.getProperty("KANBAN_ID_DIR");
                 break;
 
             case "title":
-                dir = TITLE_DIR;
+                dir = GetResources.getProperty("KANBAN_TITLE_DIR");
                 break;
 
             case "start":
-                dir = START_DIR;
+                dir = GetResources.getProperty("KANBAN_START_DIR");
                 break;
 
             case "end":
-                dir = END_DIR;
+                dir = GetResources.getProperty("KANBAN_END_DIR");
                 break;
 
             case "assignees":
-                dir = ASSIGNEES_DIR;
+                dir = GetResources.getProperty("KANBAN_ASSIGNEES_DIR");
                 return getAssignees(data, dir);
         
             default:
@@ -94,7 +88,7 @@ public class NotionDatabaseToProperties {
         for (int i=0; i<assigneesJsonArray.size(); i++) {
             result.put("assignee"+(i+1), assigneesJsonArray.get(i).getAsJsonObject().get("id").getAsString());
         }
-        
+
         return result;
     }
 }
