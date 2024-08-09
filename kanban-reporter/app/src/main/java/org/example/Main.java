@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 public class Main {
 
@@ -17,24 +15,13 @@ public class Main {
         }
         System.out.println(environment);
 
-        // Read Notion and Get Issues
+        // Read Notion and Get Database
         JsonArray database = NotionDatabaseRead.readDatabase(environment, GetResources.getProperty("NOTION_TOKEN", environment), GetResources.getProperty("NOTION_DATABASE_ID", environment));
         
-        // Filter Needed Properties
-        ArrayList<HashMap<String, String>> issues = new ArrayList<HashMap<String, String>>();
+        // Organize Database To Issue List
+        ArrayList<HashMap<String, String>> issues = NotionDatabaseToIssues.databaseToIssues(database);
 
-        for (JsonElement jsonElement : database) { // fix: 함수 분리
-            HashMap<String, String> issueProperties = new HashMap<String, String>();
-            JsonObject issue = jsonElement.getAsJsonObject();
-            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "id"));
-            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "title"));
-            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "start"));
-            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "end"));
-            issueProperties.putAll(KanbanJsonToProperty.getProperty(issue, "assignees"));
-            issues.add(issueProperties);
-        }
-
-        // Get Text To Send To Slack
+        // Transform Issue List To Texts For Slack
         ArrayList<String> textsToSend = IssuesToSlackText.issuesToTexts(environment, issues);
 
         // Create Slack Thread
