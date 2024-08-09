@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NotionToSlack {
+    private final String ENVIROMENT;
+
+    public NotionToSlack(String environment) {
+        ENVIROMENT = environment;
+    }
+
     public ArrayList<String> issuesToTexts(ArrayList<HashMap<String, String>> issues) {
         ArrayList<String> result = new ArrayList<String>();
         for (HashMap<String,String> issue : issues) {
@@ -48,7 +54,7 @@ public class NotionToSlack {
                     String slackId = notionIdToSlackId(notionId);
                     if (slackId == null) continue;
                     else {
-                        assigneesString += ("<@" + slackId + "> ");
+                        assigneesString += slackIdToSlackTag(slackId);
                     }
                 }
             }
@@ -109,10 +115,6 @@ public class NotionToSlack {
         }
     }
 
-    private enum DueState {
-        LEFT_ENOUTH, ONE_DAY_LEFT, THE_DAY, EXCEEDED_A_LITTLE, EXCEEDED_TOO_MUCH
-    }
-
     private String notionIdToSlackId(String notionId) {
         switch (notionId) {
             case "b5d64ee2-1da8-4eb5-a359-e96da5c99a32": // LHD
@@ -125,7 +127,7 @@ public class NotionToSlack {
                 return "U04EC1TMR0R";
             case "542fe32c-491e-40f9-ab67-070ed261a5ed": // WHJ
                 return "U04E1RX2Y20";
-            case "4b9b7d3c-59e9-41f6-9beb-6f11bff8352b": // NGT
+            case "4b9b7d3c-59e9-41f6-9beb-6f11bff8352b": // NKT
                 return "U06B01WQQK1";
             case "ad0c202e-ca11-456d-91d2-a1d44b13a8a8": // JJA
                 return "U06BT6ZU741";
@@ -140,5 +142,15 @@ public class NotionToSlack {
 
     private String dueStateTodueString(DueState dueState) {
         return dueState.toString();
+    }
+
+    private String slackIdToSlackTag(String slackId) {
+        if (ENVIROMENT == "prod") return ("<@" + slackId + "> ");
+        else if (ENVIROMENT == "dev") return ("@" + slackId + " ");
+        else return "";
+    }
+
+    private enum DueState {
+        LEFT_ENOUTH, ONE_DAY_LEFT, THE_DAY, EXCEEDED_A_LITTLE, EXCEEDED_TOO_MUCH
     }
 }

@@ -16,7 +16,7 @@ public class App {
     public static void main(String[] args) {
         // Read Environment, Default = dev
         String environment = System.getenv("env");
-        if (environment == null) {
+        if (environment == null || (environment != "dev" && environment != "prod")) {
             environment = "dev";
         }
         System.out.println(environment);
@@ -46,7 +46,7 @@ public class App {
         }
 
         // Get Text To Send To Slack
-        NotionToSlack notionToSlack = new NotionToSlack();
+        NotionToSlack notionToSlack = new NotionToSlack(environment);
         ArrayList<String> textsToSend = notionToSlack.issuesToTexts(issues);
 
         // Create Slack Thread
