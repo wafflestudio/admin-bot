@@ -18,10 +18,13 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.title }}" == release* ]]; then
             echo "should_run=false" >> $GITHUB_ENV
+            exit
           elif [[ "${{ github.event_name }}" == "push" && "${{ github.event.head_commit.message }}" == release* ]]; then
             echo "should_run=false" >> $GITHUB_ENV
+            exit
           else
             echo "should_run=true" >> $GITHUB_ENV
+            exit
           fi
 
   build:
