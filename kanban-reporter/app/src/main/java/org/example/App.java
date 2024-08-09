@@ -46,7 +46,7 @@ public class App {
         }
 
         // Get Text To Send To Slack
-        NotionToSlack notionToSlack = new NotionToSlack();
+        NotionToSlack notionToSlack = new NotionToSlack(environment);
         ArrayList<String> textsToSend = notionToSlack.issuesToTexts(issues);
 
         // Create Slack Thread
