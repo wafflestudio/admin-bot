@@ -11,6 +11,8 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+            
           - name: Call kanban-reporter-dev
             uses: ./.github/workflows/kanban-reporter-dev.yml
-            
