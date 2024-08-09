@@ -21,7 +21,7 @@ public class Main {
         JsonArray database = NotionDatabaseRead.readDatabase(environment, GetResources.getProperty("NOTION_TOKEN", environment), GetResources.getProperty("NOTION_DATABASE_ID", environment));
         
         // Filter Needed Properties
-        NotionDatabaseToProperties notionDatabaseToProperties = new NotionDatabaseToProperties();
+        KanbanJsonToProperty notionDatabaseToProperties = new KanbanJsonToProperty();
         ArrayList<HashMap<String, String>> issues = new ArrayList<HashMap<String, String>>();
 
         for (JsonElement jsonElement : database) { // fix: 함수 분리

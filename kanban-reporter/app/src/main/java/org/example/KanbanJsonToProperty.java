@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class NotionDatabaseToProperties {
+public class KanbanJsonToProperty {
     public HashMap<String, String> getProperty(JsonObject data, String propertyName) {
         String dir;
         HashMap<String, String> result = new HashMap<String, String>();
