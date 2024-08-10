@@ -21,7 +21,7 @@ jobs:
       - name: Automatically Assign Assignees
         uses: kentaro-m/auto-assign-action@v2.0.0
         with:
-          configuration-path: './admin-bot/.github/workflows/add_assignees.yml'
+          configuration-path: '.github/add_assignees.yml'
 
   build:
     name: Test Build and Run Dev For Kanban Reporter
