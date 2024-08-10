@@ -14,7 +14,15 @@ jobs:
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ github.token }}
-          
+
+  add-assignees:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Automatically Assign Assignees
+        uses: kentaro-m/auto-assign-action@v2.0.0
+        with:
+          configuration-path: '.github/workflows/add_assignees.yml'
+
   build:
     name: Test Build and Run Dev For Kanban Reporter
     timeout-minutes: 15
