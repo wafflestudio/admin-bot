@@ -6,10 +6,6 @@ on:
   push:
     branches: [main]
 
-permissions:
-  contents: read
-  pull-requests: write
-
 jobs:
   cancel-workflow:
     runs-on: ubuntu-latest
@@ -25,7 +21,6 @@ jobs:
       - name: Automatically Assign Assignees
         uses: kentaro-m/auto-assign-action@v2.0.0
         with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
           configuration-path: '.github/add_assignees.yml'
 
   build:
