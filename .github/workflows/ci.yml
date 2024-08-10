@@ -7,6 +7,14 @@ on:
     branches: [main]
 
 jobs:
+  cancel-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ github.token }}
+          
   build:
     name: Test Build and Run Dev For Kanban Reporter
     timeout-minutes: 15
