@@ -25,7 +25,7 @@ wafflestudio team-admin-2024의 Admin Bot
 
 ## Notes 
 
-- [(kanban-reporter 노션 페이지)](https://www.notion.so/wafflestudio/3881d1ba43cd44868fef55ab4ce15ae0)
+- [kanban-reporter 노션 페이지](https://www.notion.so/wafflestudio/3881d1ba43cd44868fef55ab4ce15ae0)
 
 ## References
 

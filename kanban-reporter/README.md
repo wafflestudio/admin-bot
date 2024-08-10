@@ -6,7 +6,7 @@
 
 ## Notes
 
-- [(버전 기록 노션 페이지)](https://www.notion.so/wafflestudio/81446e9345d44ba7a49a19c70bc9be10)
+- [버전 기록 노션 페이지](https://www.notion.so/wafflestudio/81446e9345d44ba7a49a19c70bc9be10)
 
 ## Reference
 
