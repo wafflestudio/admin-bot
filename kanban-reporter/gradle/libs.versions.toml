@@ -2,12 +2,12 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-gson = "2.10.1"
-guava = "33.1.0-jre"
+gson = "2.11.0"
+guava = "33.2.1-jre"
 jsonSimple = "1.1.1"
 okhttp = "4.12.0"
-slackApiClient = "1.28.0"
-slf4j = "1.7.36"
+slackApiClient = "1.40.3"
+slf4j = "2.0.15"
 
 [libraries]
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
