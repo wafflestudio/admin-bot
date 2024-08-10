@@ -16,6 +16,7 @@ jobs:
           access_token: ${{ github.token }}
 
   add-assignees:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Automatically Assign Assignees
