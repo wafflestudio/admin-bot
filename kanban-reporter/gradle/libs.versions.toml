@@ -2,9 +2,18 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-guava = "33.1.0-jre"
-junit-jupiter = "5.10.2"
+gson = "2.11.0"
+guava = "33.2.1-jre"
+jsonSimple = "1.1.1"
+okhttp = "4.12.0"
+slackApiClient = "1.40.3"
+slf4j = "2.0.15"
 
 [libraries]
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+jsonSimple = { group = "com.googlecode.json-simple", name = "json-simple", version.ref = "jsonSimple" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+slackApiClient = { group = "com.slack.api", name = "slack-api-client", version.ref = "slackApiClient" }
+slf4jApi = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+slf4jNop = { group = "org.slf4j", name = "slf4j-nop", version.ref = "slf4j" }

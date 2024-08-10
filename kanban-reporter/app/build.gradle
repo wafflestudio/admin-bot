@@ -16,25 +16,19 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation libs.junit.jupiter
-
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // This dependency is used by the application.
     implementation libs.guava
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
-    implementation("com.google.code.gson:gson:2.10.1")
+    // 네트워크 통신
+    implementation libs.okhttp
+    implementation libs.jsonSimple
+    implementation libs.gson
 
     // Slack API 클라이언트
-    implementation 'com.slack.api:bolt:1.40.3'
-    implementation 'com.slack.api:slack-api-client:1.28.0'
-    implementation 'com.slack.api:slack-api-model:1.28.0'
+    implementation libs.slackApiClient
 
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'org.slf4j:slf4j-nop:1.7.36'
+    // Slack 관련, 로깅 차단
+    implementation libs.slf4jApi
+    implementation libs.slf4jNop
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
