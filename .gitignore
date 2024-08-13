@@ -1,3 +1,4 @@
 kanban-reporter/config/
 kanban-reporter/src/**/*.class
 kanban-reporter/bin/
+**/.DS_Store
