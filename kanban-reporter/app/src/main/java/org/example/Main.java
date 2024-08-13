@@ -33,7 +33,9 @@ public class Main {
         // Create Comments Into The Thread
         Boolean success = true;
         for (String comment : textsToSend) {
-            success = SlackBot.createComment(slackBotToken, slackChannelId, threadTs, comment);
+            if (!comment.isEmpty()) {
+                success = SlackBot.createComment(slackBotToken, slackChannelId, threadTs, comment);
+            }
         }
         System.out.println(success);
     }
